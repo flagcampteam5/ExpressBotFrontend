@@ -1,4 +1,4 @@
-Backend set up exercise
+set up exercise
 
 两个公用账号的 repo 由组长 access 用户名和密码。
 
@@ -15,9 +15,9 @@ Scenerio
 由于组员们本身就是项目合作者，所以拥有权力决定是否批准该 pull request。但是恳请各位组员请勿在未经 code review 的情况下 Merge pull request.
 Exercise
 
-请每个人通过使用以下 command lines 完成以下练习：在 ExpressBotBackend/week1-checkoff.txt 里添加自己的名字。
+请每个人通过使用以下 command lines 完成以下练习：在 ExpressBotFrontend/src/index.js 里添加自己的名字。
 
-git clone https://github.com/flagcampteam5/ExpressBotBackend.git
+git clone https://github.com/flagcampteam5/ExpressBotFrontend.git
 On team projects, we use repositories whose main version is stored on a remote server. Then, each developer on the team will have their own local branch of the code.
 
 git fetch will tell local git to retrieve the latest (yet doesn't do any file transferring. just checking to see if there are any changes available)
@@ -30,7 +30,7 @@ Now all changes made to the remote repository — including changes made to ever
 Notice: -b means creating a new branch
 
 git checkout -b [your branch name]
-After you edit ExpressBotFrontend/src/index.js by appending your name in a <p></p> on the webpage, remember to add, commit and push.
+After you edit ExpressBotFrontend/src/index.js by appending your name in a <p>[your name]</p> on the webpage, remember to add, commit and push.
 If you run npm start, you should be able to see your name and the names of the other team members who have already made changes on your browser at localhost/300.
 
 git add
@@ -46,5 +46,5 @@ follow it and run git push --set-upstream origin [your branch name].
 After that you will see a successful message as
 
 remote: Create a pull request for '[your branch name]' on GitHub by visiting:
-remote:      https://github.com/flagcampteam5/ExpressBotBackend/pull/new/[your branch name]
+remote:      https://github.com/flagcampteam5/ExpressFrontend/pull/new/[your branch name]
 Then you are done! We will handle the pull request.
