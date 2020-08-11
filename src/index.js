@@ -5,9 +5,9 @@ import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
     <React.StrictMode >
-        <p> Hong Lu made a change </p>
-        <p> Zihao Wang made a change </p>
-        <p> Zhongyu Li made a change </p>
+        <p>Hong Lu made a change</p>
+        <p>Zihao Wang made a change</p>
+        <p>Zhongyu Li made a change</p>
     </React.StrictMode>,
     document.getElementById("root")
 );
