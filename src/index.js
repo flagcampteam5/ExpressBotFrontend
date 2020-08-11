@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <p>Hong Lu made a change</p>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <p>Hong Lu made a change</p>
+        <p>Zihao Wang made a change</p>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
