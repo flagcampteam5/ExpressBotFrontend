@@ -1,20 +1,32 @@
 import React, { Component } from "react";
 import { Card, Form, Input, Button } from "antd";
 import { Link } from "react-router-dom";
+import Map from "../Map";
 
 class Request extends Component {
   constructor() {
     super();
     this.state = {
       orderPlaced: false,
+      customerEmail: null,
     };
   }
 
   render() {
     if (this.state.orderPlaced === false) {
-      return <this.renderForm />;
+      return (
+        <div>
+          <this.renderForm />
+          <Map />
+        </div>
+      );
     }
-    return <this.renderComfirmation />;
+    return (
+      <div>
+        <this.renderComfirmation />
+        <Map />
+      </div>
+    );
   }
 
   renderForm = () => {
@@ -22,7 +34,7 @@ class Request extends Component {
       <Card title="Request Details">
         <Form>
           <Form.Item
-            name="Your input"
+            name="Input email"
             rules={[
               {
                 type: "email",
@@ -33,7 +45,10 @@ class Request extends Component {
             <Input placeholder="Enter Your Email" />
           </Form.Item>
           <Form.Item>
-            <Input placeholder="Enter Recipient's Email" />
+            <Input
+              placeholder="Enter Recipient's Email"
+              onChange={this.handleChange}
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={this.handleSubmit}>
@@ -73,6 +88,11 @@ class Request extends Component {
       orderPlaced: true,
     });
   };
-}
 
+  handleChange = (e) => {
+    this.setState({
+      customerEmail: e.target.value,
+    });
+  };
+}
 export default Request;
