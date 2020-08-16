@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Card, Input, Form, Button } from "antd";
+
 import Map from "../Map";
 import image from "../../assets/images/RobotDelivery.jpeg";
 
@@ -19,6 +20,7 @@ class Service extends Component {
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to="/request" />;
+
     }
   };
   render() {
