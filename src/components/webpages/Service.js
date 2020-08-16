@@ -31,22 +31,23 @@ class Service extends Component {
           </p>
           <img src={image} alt="Delivery by robots" />
         </div>
-        <Card title="Request A Pick-Up">
-          <Form>
-            <Form.Item>
-              <Input placeholder="Enter Your Pick-Up Location" />
-            </Form.Item>
-            <Form.Item>
-              <Input placeholder="Enter Your Destination" />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary">
-                <Link to={"/request"}>Request</Link>
-              </Button>
-            </Form.Item>
-          </Form>
-        </Card>
-        <img src={background} alt="San Francisco" />
+        <div className="Background">
+          <Card className="RequestCard" title="Request A Pick-Up">
+            <Form>
+              <Form.Item>
+                <Input placeholder="Enter Your Pick-Up Location" />
+              </Form.Item>
+              <Form.Item>
+                <Input placeholder="Enter Your Destination" />
+              </Form.Item>
+              <Form.Item>
+                <Button className="Button" type="primary">
+                  <Link to={"/request"}>Request</Link>
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </div>
       </div>
     );
   }

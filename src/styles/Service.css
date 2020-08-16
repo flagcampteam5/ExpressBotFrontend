@@ -1,42 +1,29 @@
-.service {
-    background-image: none;
-}
 .Block {
-    color: white;
-    background-color: #fcc438;
-    height: 350px;
-    padding: 30px;
-    display: flex;
+  color: white;
+  background-color: #fcc438;
+  height: 350px;
+  padding: 30px;
+  display: flex;
 }
-.form {
-    background-color: rgba(255, 255, 255, 0.5);
-    width: 400px;
-    margin: 30px auto;
-    padding: 20px;
-    height: 300px;
-    border-radius: 15px;
+.RequestCard {
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+  height: 300px;
+  border-radius: 15px;
+  border-color: transparent;
+  position: center;
 }
-.form-div {
-    background-image: url(../asset/images/SF.jpg);
-    background-size: cover;
-    padding: 30px;
+.Background {
+  background-image: url(../assets/images/SF.jpg);
+  background-size: cover;
+  min-height: 900px;
+  padding: 30px;
+  align-items: center;
 }
-.button {
-    width: 360px;
-    background-color: #fcc438;
-}
-.span {
-    margin-left: 100px;
-    font-size: 1.5em;
-    font-weight: bold;
-}
-.input {
-    background-color: #c1e4f7;
-}
-.picture {
-    /* background-image: url(../asset/images/RobotDelivery.jpeg);
-    background-size: cover; */
-}
-.introduction {
-    width: 60%;
+.Button {
+  width: 300px;
+  border-color: #fcc438;
+  background-color: #fcc438;
 }
