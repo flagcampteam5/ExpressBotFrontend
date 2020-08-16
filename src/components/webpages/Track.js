@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Card, Form, Button, Input, Modal} from 'antd';
+import {Card, Form, Button, Input} from 'antd';
+import Progress from '../Progress';
 
 class Track extends Component{
     constructor(props){
@@ -46,8 +47,11 @@ class Track extends Component{
 
             return(
                 <Card title ={this.state.orderTrackingMsg} >
-                    <div>progress bar UI goes here</div>
+                    <div>
+                        <Progress/>
+                    </div>
                 </Card>
+
             )
         }
         
