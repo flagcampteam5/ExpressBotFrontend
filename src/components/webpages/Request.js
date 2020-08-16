@@ -47,6 +47,11 @@ class Request extends Component {
   renderComfirmation = () => {
     return (
       <Card title="Thank You For Your Order!">
+        <ul>
+          <li>Order Number: 12345ABC</li>
+          <li>Estimated Delivery Time: 12:00 PM</li>
+          <li>Order total: $10</li>
+        </ul>
         <Form>
           <Form.Item>
             <Button type="primary">
