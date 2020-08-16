@@ -5,7 +5,6 @@ import Service from "./webpages/Service";
 import AboutUs from "./webpages/AboutUs";
 import Track from "./webpages/Track";
 import Request from "./webpages/Request";
-import Map from "./Map";
 
 function App() {
   return (
