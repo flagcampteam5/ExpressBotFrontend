@@ -1,33 +1,73 @@
-import React, { Component } from 'react';
-import {Card, Form, Input, Button} from 'antd';
+import React, { Component } from "react";
+import { Card, Form, Input, Button } from "antd";
+import { Link } from "react-router-dom";
+
 class Request extends Component {
-    render(){
-        return(
-            <Card title="Request Details">
-                   <Form>
-                        <Form.Item
-                            name = 'Your input'
-                            rules={[
-                                {
-                                    type: 'email',
-                                    required: true
-                                },
-                                
-                            ]}>
-                            <Input placeholder="Enter Your Email"
-                                />
-                       </Form.Item>
-                       <Form.Item>
-                           <Input placeholder="Enter Recipient's Email"/>
-                       </Form.Item>
-                       <Form.Item>
-                           <Button type="primary" >
-                               Request
-                            </Button>
-                       </Form.Item>
-                   </Form>
-               </Card>
-        )
+  constructor() {
+    super();
+    this.state = {
+      orderPlaced: false,
+    };
+  }
+
+  render() {
+    if (this.state.orderPlaced === false) {
+      return <this.renderForm />;
     }
+    return <this.renderComfirmation />;
+  }
+
+  renderForm = () => {
+    return (
+      <Card title="Request Details">
+        <Form>
+          <Form.Item
+            name="Your input"
+            rules={[
+              {
+                type: "email",
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Enter Your Email" />
+          </Form.Item>
+          <Form.Item>
+            <Input placeholder="Enter Recipient's Email" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" onClick={this.handleSubmit}>
+              Request
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    );
+  };
+  renderComfirmation = () => {
+    return (
+      <Card title="Thank You For Your Order!">
+        <Form>
+          <Form.Item>
+            <Button type="primary">
+              <Link to="/tracking">Track Order</Link>
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary">
+              <Link to="/">Place Another Order</Link>
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    );
+  };
+
+  handleSubmit = () => {
+    this.setState({
+      orderPlaced: true,
+    });
+  };
 }
+
 export default Request;
