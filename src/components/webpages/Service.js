@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import AddressAutocomplete from "../AddressAutocomplete";
 import { Redirect, Link } from "react-router-dom";
-import { Card, Form, Input, Button } from "antd";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-google-places-autocomplete";
-import { GOOGLE_KEY } from "../../constants";
-import Script from "react-load-script";
+import { Card, Form, Button } from "antd";
+import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import image from "../../assets/images/RobotDelivery.jpeg";
+
 class Service extends Component {
   constructor() {
     super();
