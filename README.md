@@ -1,3 +1,12 @@
+同学们如果clone了repo到本地发现compile不了，记得在src folder里加一个file叫constants.js.然后申请一个google maps api key，免费的就可以了。在constants.js 里写上：
+
+export const GOOGLE_KEY = "你的api key";
+
+export const GOOGLE_PLACES_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_KEY}&libraries=places`;
+
+
+
+
 set up exercise
 
 两个公用账号的 repo 由组长 access 用户名和密码。
