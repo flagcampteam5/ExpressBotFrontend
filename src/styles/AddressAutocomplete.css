@@ -1,8 +1,3 @@
-.Autocomplete {
-  width: 250px;
-  position: absolute;
-  background-color: #c1e4f7;
-}
 .google-places-autocomplete__input {
   background-color: #c1e4f7;
   border-color: transparent;
