@@ -4,19 +4,24 @@ import { Link } from "react-router-dom";
 import Map from "../Map";
 
 class Request extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       orderPlaced: false,
       customerEmail: null,
+      pickUpLocation: this.props.location.state.pickUpLocation,
+      destination: this.props.location.state.destination,
     };
   }
-
   render() {
     if (this.state.orderPlaced === false) {
       return (
         <div>
           <this.renderForm />
+          <ul>
+            <li>Pick-Up Location: {this.state.pickUpLocation}</li>
+            <li>Destination: {this.state.destination}</li>
+          </ul>
           <Map />
         </div>
       );
@@ -24,6 +29,10 @@ class Request extends Component {
     return (
       <div>
         <this.renderComfirmation />
+        <ul>
+          <li>Pick-Up Location: {this.state.pickUpLocation}</li>
+          <li>Destination: {this.state.destination}</li>
+        </ul>
         <Map />
       </div>
     );
@@ -34,7 +43,7 @@ class Request extends Component {
       <Card title="Request Details">
         <Form>
           <Form.Item
-            name="Input email"
+            name="Your Input"
             rules={[
               {
                 type: "email",
