@@ -9,8 +9,10 @@ class Request extends Component {
     this.state = {
       orderPlaced: false,
       customerEmail: null,
-      pickUpLocation: this.props.location.state.pickUpLocation,
-      destination: this.props.location.state.destination,
+      pickUpAddress: this.props.location.state.pickUpAddress,
+      pickUpLatLng: this.props.location.state.pickUpLatLng,
+      destinationAddress: this.props.location.state.destinationAddress,
+      destinationLatLng: this.props.location.state.destinationLatLng,
     };
   }
   render() {
@@ -19,10 +21,13 @@ class Request extends Component {
         <div>
           <this.renderForm />
           <ul>
-            <li>Pick-Up Location: {this.state.pickUpLocation}</li>
-            <li>Destination: {this.state.destination}</li>
+            <li>Pick-Up Location: {this.state.pickUpAddress}</li>
+            <li>Destination: {this.state.destinationAddress}</li>
           </ul>
-          <Map />
+          <Map
+            pickUpLatLng={this.state.pickUpLatLng}
+            destinationLatLng={this.state.destinationLatLng}
+          />
         </div>
       );
     }
@@ -30,8 +35,8 @@ class Request extends Component {
       <div>
         <this.renderComfirmation />
         <ul>
-          <li>Pick-Up Location: {this.state.pickUpLocation}</li>
-          <li>Destination: {this.state.destination}</li>
+          <li>Pick-Up Location: {this.state.pickUpAddress}</li>
+          <li>Destination: {this.state.destinationAddress}</li>
         </ul>
         <Map />
       </div>

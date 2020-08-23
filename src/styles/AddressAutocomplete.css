@@ -1,14 +1,15 @@
 .google-places-autocomplete__input {
   background-color: #c1e4f7;
   border-color: transparent;
-  width: 300px;
+  width: 350px;
+  height: 45px;
 }
 .DropDown {
   margin: 0 auto;
   max-height: 300px;
-  width: 300px;
+  width: 350px;
   overflow: auto;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 8x 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   background-color: #c1e4f7;
   position: absolute;

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import { GOOGLE_KEY } from "../constants";
 
-const location = {
+const center = {
   lat: 37.773972,
   lng: -122.431297,
 };
@@ -15,8 +15,8 @@ class Map extends Component {
           google={this.props.google}
           style={{ width: "300px", height: "400px", position: "relative" }}
           bootstrapURLKeys={{ key: GOOGLE_KEY }}
-          defaultCenter={location}
-          defaultZoom={11}
+          defaultCenter={center}
+          defaultZoom={10}
           onGoogleApiLoaded={({ map, maps }) => this.renderMarkers(map, maps)}
         ></GoogleMapReact>
       </div>
@@ -24,11 +24,11 @@ class Map extends Component {
   }
   renderMarkers = (map, maps) => {
     let marker1 = new maps.Marker({
-      position: location,
+      position: this.props.pickUpLatLng,
       map,
     });
     let marker2 = new maps.Marker({
-      position: { lat: 40.773972, lng: -122.431297 },
+      position: this.props.destinationLatLng,
       map,
     });
     return [marker1, marker2];

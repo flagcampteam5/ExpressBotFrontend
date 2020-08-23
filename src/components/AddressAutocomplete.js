@@ -6,11 +6,6 @@ import PlacesAutocomplete, {
 import { GOOGLE_KEY } from "../constants";
 
 class AddressAutocomplete extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { places: [] };
-  }
-
   render() {
     return (
       <div>
@@ -18,6 +13,10 @@ class AddressAutocomplete extends Component {
           className="Autocomplete"
           apiKey={GOOGLE_KEY}
           placeholder={this.props.placeholder}
+          onSelect={({ description }) => {
+            console.log(description);
+            this.handleSelect(description);
+          }}
           renderSuggestions={(active, suggestions, onSelectSuggestion) => (
             <div className="DropDown">
               {suggestions.map((suggestion) => (
@@ -31,9 +30,6 @@ class AddressAutocomplete extends Component {
               ))}
             </div>
           )}
-          //value={this.state.address}
-          //onChange={this.handleChange}
-          //onSelect={this.handleSelect}
         ></PlacesAutocomplete>
       </div>
     );
@@ -44,9 +40,14 @@ class AddressAutocomplete extends Component {
   };
 
   handleSelect = (address) => {
+    console.log("received address: ", address);
+    this.props.onChangeAddress(address);
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log("Success", latLng))
+      .then((latLng) => {
+        console.log("success", latLng);
+        this.props.onChangeLatLng(latLng);
+      })
       .catch((error) => console.error("Error", error));
   };
 }
