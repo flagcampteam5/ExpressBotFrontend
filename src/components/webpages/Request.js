@@ -1,18 +1,31 @@
 import React, { Component } from "react";
-import { Card, Form, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Card, Form, Input, Button, Select, Radio, Popover } from "antd";
+import uuid from "react-uuid";
 import Map from "../Map";
+import Confirmation from "./Confirmation";
 
 class Request extends Component {
   constructor(props) {
     super(props);
+    this.handleCustomerEmail = this.handleCustomerEmail.bind(this);
+    this.handleRecipientEmail = this.handleRecipientEmail.bind(this);
+    this.handleWeight = this.handleWeight.bind(this);
+    this.handleDimension = this.handleDimension.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       orderPlaced: false,
       customerEmail: null,
+      recipientEmail: null,
       pickUpAddress: this.props.location.state.pickUpAddress,
       pickUpLatLng: this.props.location.state.pickUpLatLng,
       destinationAddress: this.props.location.state.destinationAddress,
       destinationLatLng: this.props.location.state.destinationLatLng,
+      weight: null,
+      dimension: null,
+      orderTime: { date: null, hour: null, minute: null },
+      estimatedDeliveryTime: { date: null, hour: null, minute: null },
+      typeOfRobot: null,
+      orderId: null,
     };
   }
   render() {
@@ -20,30 +33,52 @@ class Request extends Component {
       return (
         <div>
           <this.renderForm />
-          <ul>
-            <li>Pick-Up Location: {this.state.pickUpAddress}</li>
-            <li>Destination: {this.state.destinationAddress}</li>
-          </ul>
-          <Map
-            pickUpLatLng={this.state.pickUpLatLng}
-            destinationLatLng={this.state.destinationLatLng}
-          />
+          <this.renderMap />
         </div>
       );
     }
     return (
       <div>
-        <this.renderComfirmation />
-        <ul>
-          <li>Pick-Up Location: {this.state.pickUpAddress}</li>
-          <li>Destination: {this.state.destinationAddress}</li>
-        </ul>
-        <Map />
+        <Confirmation
+          orderId={this.state.orderId}
+          customerEmail={this.state.customerEmail}
+          pickUpAddress={this.state.pickUpAddress}
+          destinationAddress={this.state.destinationAddress}
+          estimatedDeliveryTime={this.state.estimatedDeliveryTime}
+        />
+        <this.renderMap />
       </div>
     );
   }
 
   renderForm = () => {
+    const { Option } = Select;
+    const weights = [
+      { text: "< 5lbs", value: 5 },
+      { text: "< 10lbs", value: 10 },
+      { text: "< 20lbs", value: 20 },
+      { text: "< 30lbs", value: 30 },
+      { text: "< 50lbs", value: 50 },
+    ];
+    const dimensions = [
+      { text: "< 5 inches X 5 inches", value: 5 },
+      { text: "< 10 inches X 10 inches", value: 10 },
+      { text: "< 20 inches X 20 inches", value: 20 },
+      { text: "< 30 inches X 30 inches", value: 30 },
+      { text: "< 40 inches X 40 inches", value: 40 },
+    ];
+    const droneInfo = {
+      text:
+        "Drones are designed to carry light-weight, small packages. They fly in a straight line from the pick-up location to the destination. They are faster than road bots but cost more per minute.",
+      speed: 0.7,
+      price: 1,
+    };
+    const roadBotInfo = {
+      text:
+        "Road bots can carry heavier and larger packages than drones. They are slower than drones but cost less per minute.",
+      speed: 0.1,
+      price: 0.5,
+    };
     return (
       <Card title="Request Details">
         <Form>
@@ -56,40 +91,77 @@ class Request extends Component {
               },
             ]}
           >
-            <Input placeholder="Enter Your Email" />
+            <Input
+              placeholder="Enter Your Email"
+              onChange={this.handleCustomerEmail}
+            />
           </Form.Item>
           <Form.Item>
             <Input
               placeholder="Enter Recipient's Email"
-              onChange={this.handleChange}
+              onChange={this.handleRecipientEmail}
             />
+          </Form.Item>
+          <Form.Item
+            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+          >
+            <Select
+              defaultValue="Weight of Package"
+              onChange={this.handleWeight}
+            >
+              {weights.map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.text}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            {
+              <Select
+                defaultValue="Dimension of Package"
+                onChange={this.handleDimension}
+              >
+                {dimensions.map((option) => (
+                  <Option key={option.value} value={option.value}>
+                    {option.text}
+                  </Option>
+                ))}
+              </Select>
+            }
+          </Form.Item>
+          <Form.Item>
+            {this.state.weight !== null && this.state.dimension !== null ? (
+              <Radio.Group
+                defaultValue="Drone"
+                buttonStyle="solid"
+                onChange={this.handleRobotSelect}
+              >
+                <Popover content={droneInfo.text} placement="topLeft">
+                  <Radio.Button
+                    value="Drone"
+                    disabled={
+                      this.state.weight > 20 || this.state.dimension > 20
+                    }
+                  >
+                    Drone
+                  </Radio.Button>
+                </Popover>
+                <Popover content={roadBotInfo.text} placement="topLeft">
+                  <Radio.Button value="RoadBot">Road Bot</Radio.Button>
+                </Popover>
+              </Radio.Group>
+            ) : null}
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={this.handleSubmit}>
-              Request
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    );
-  };
-  renderComfirmation = () => {
-    return (
-      <Card title="Thank You For Your Order!">
-        <ul>
-          <li>Order Number: 12345ABC</li>
-          <li>Estimated Delivery Time: 12:00 PM</li>
-          <li>Order total: $10</li>
-        </ul>
-        <Form>
-          <Form.Item>
-            <Button type="primary">
-              <Link to="/tracking">Track Order</Link>
-            </Button>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary">
-              <Link to="/">Place Another Order</Link>
+              Confirm
             </Button>
           </Form.Item>
         </Form>
@@ -97,16 +169,74 @@ class Request extends Component {
     );
   };
 
+  renderMap = () => {
+    return (
+      <div>
+        <ul>
+          <li>Pick-Up Location: {this.state.pickUpAddress}</li>
+          <li>Destination: {this.state.destinationAddress}</li>
+        </ul>
+        <Map
+          pickUpLatLng={this.state.pickUpLatLng}
+          destinationLatLng={this.state.destinationLatLng}
+          typeOfRobot={this.state.typeOfRobot}
+        />
+      </div>
+    );
+  };
   handleSubmit = () => {
+    var time = new Date();
+    //need to find a way to estimate delivery time. It's hard-coded for now
+    var deliveryTime = new Date(time.getTime() + 20 * 60000);
     this.setState({
+      orderTime: {
+        date: time.getDay(),
+        hour: time.getHours(),
+        minute: time.getMinutes(),
+      },
+      estimatedDeliveryTime: {
+        date: deliveryTime.getDay(),
+        hour: deliveryTime.getHours(),
+        minute: deliveryTime.getMinutes(),
+      },
+      orderId: uuid(),
       orderPlaced: true,
     });
   };
 
-  handleChange = (e) => {
+  handleCustomerEmail = (e) => {
     this.setState({
       customerEmail: e.target.value,
     });
+  };
+  handleRecipientEmail = (e) => {
+    this.setState({
+      recipientEmail: e.target.value,
+    });
+  };
+
+  handleWeight = (value) => {
+    this.setState({
+      weight: parseInt(value),
+    });
+  };
+  handleDimension = (value) => {
+    this.setState({
+      dimension: parseInt(value),
+    });
+  };
+  handleRobotSelect = (e) => {
+    this.setState({
+      typeOfRobot: e.target.value,
+    });
+    console.log(e.target.value);
+    return (
+      <Map
+        pickUpLatLng={this.state.pickUpLatLng}
+        destinationLatLng={this.state.destinationLatLng}
+        typeOfRobot={e.target.value}
+      />
+    );
   };
 }
 export default Request;

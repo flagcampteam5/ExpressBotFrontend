@@ -4,6 +4,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-google-places-autocomplete";
 import { GOOGLE_KEY } from "../constants";
+import { Spin } from "antd";
 
 class AddressAutocomplete extends Component {
   render() {
@@ -13,8 +14,8 @@ class AddressAutocomplete extends Component {
           className="Autocomplete"
           apiKey={GOOGLE_KEY}
           placeholder={this.props.placeholder}
+          loader={<Spin spinning={true} tip="Loading..." />}
           onSelect={({ description }) => {
-            console.log(description);
             this.handleSelect(description);
           }}
           renderSuggestions={(active, suggestions, onSelectSuggestion) => (
@@ -40,12 +41,10 @@ class AddressAutocomplete extends Component {
   };
 
   handleSelect = (address) => {
-    console.log("received address: ", address);
     this.props.onChangeAddress(address);
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
-        console.log("success", latLng);
         this.props.onChangeLatLng(latLng);
       })
       .catch((error) => console.error("Error", error));
