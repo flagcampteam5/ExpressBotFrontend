@@ -7,6 +7,7 @@ import Confirmation from "./Confirmation";
 class Request extends Component {
   constructor(props) {
     super(props);
+    this.Map = React.createRef();
     this.handleCustomerEmail = this.handleCustomerEmail.bind(this);
     this.handleRecipientEmail = this.handleRecipientEmail.bind(this);
     this.handleWeight = this.handleWeight.bind(this);
@@ -24,7 +25,7 @@ class Request extends Component {
       dimension: null,
       orderTime: { date: null, hour: null, minute: null },
       estimatedDeliveryTime: { date: null, hour: null, minute: null },
-      typeOfRobot: null,
+      typeOfRobot: "Drone",
       orderId: null,
     };
   }
@@ -33,7 +34,7 @@ class Request extends Component {
       return (
         <div>
           <this.renderForm />
-          <this.renderMap />
+          {this.renderMap(this.state.typeOfRobot)}
         </div>
       );
     }
@@ -46,7 +47,7 @@ class Request extends Component {
           destinationAddress={this.state.destinationAddress}
           estimatedDeliveryTime={this.state.estimatedDeliveryTime}
         />
-        <this.renderMap />
+        {this.renderMap(this.state.typeOfRobot)}
       </div>
     );
   }
@@ -139,7 +140,7 @@ class Request extends Component {
           <Form.Item>
             {this.state.weight !== null && this.state.dimension !== null ? (
               <Radio.Group
-                defaultValue="Drone"
+                defaultValue={this.state.typeOfRobot}
                 buttonStyle="solid"
                 onChange={this.handleRobotSelect}
               >
@@ -169,7 +170,7 @@ class Request extends Component {
     );
   };
 
-  renderMap = () => {
+  renderMap = (typeOfRobot) => {
     return (
       <div>
         <ul>
@@ -180,6 +181,7 @@ class Request extends Component {
           pickUpLatLng={this.state.pickUpLatLng}
           destinationLatLng={this.state.destinationLatLng}
           typeOfRobot={this.state.typeOfRobot}
+          ref={this.Map}
         />
       </div>
     );
@@ -217,26 +219,54 @@ class Request extends Component {
 
   handleWeight = (value) => {
     this.setState({
-      weight: parseInt(value),
+      weight: value,
     });
+    if (value > 20 && this.state.dimension !== null) {
+      this.setState({
+        typeOfRobot: "RoadBot",
+      });
+      this.Map.current.renderRoadbotRoute();
+    } else if (
+      value <= 20 &&
+      this.state.dimension !== null &&
+      this.state.dimension <= 20
+    ) {
+      this.setState({
+        typeOfRobot: "Drone",
+      });
+      this.Map.current.renderDroneRoute();
+    }
   };
   handleDimension = (value) => {
     this.setState({
-      dimension: parseInt(value),
+      dimension: value,
     });
+    if (value > 20 && this.state.weight !== null) {
+      this.setState({
+        typeOfRobot: "RoadBot",
+      });
+      this.Map.current.renderRoadbotRoute();
+    } else if (
+      value <= 20 &&
+      this.state.weight !== null &&
+      this.state.weight <= 20
+    ) {
+      this.setState({
+        typeOfRobot: "Drone",
+      });
+      this.Map.current.renderDroneRoute();
+    }
   };
   handleRobotSelect = (e) => {
     this.setState({
       typeOfRobot: e.target.value,
     });
     console.log(e.target.value);
-    return (
-      <Map
-        pickUpLatLng={this.state.pickUpLatLng}
-        destinationLatLng={this.state.destinationLatLng}
-        typeOfRobot={e.target.value}
-      />
-    );
+    if (e.target.value === "Drone") {
+      this.Map.current.renderDroneRoute();
+    } else {
+      this.Map.current.renderRoadbotRoute();
+    }
   };
 }
 export default Request;
