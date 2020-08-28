@@ -1,11 +1,14 @@
-import React, { Component} from 'react';
+import React, { Component } from "react";
+import Map from "./Map";
 
 class Progress extends Component {
-    render(){
-        return(
-            <p>progress UI goes here</p>
-        )
-    }
+  render() {
+    return (
+      <div className="MapContainer">
+        <Map />
+      </div>
+    );
+  }
 }
 
 export default Progress;

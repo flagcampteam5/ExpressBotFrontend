@@ -19,7 +19,7 @@
   margin: 90px auto;
   text-align: center;
   padding: 30px;
-  height: 350px;
+  height: auto;
   border-radius: 15px;
   border-color: transparent;
 }
@@ -32,7 +32,7 @@
 }
 .Button {
   width: 350px;
-  height: 35px;
+  height: 40px;
   border-color: #fcc438;
   background-color: #fcc438;
 }
