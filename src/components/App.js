@@ -5,7 +5,7 @@ import Service from "./webpages/Service";
 import AboutUs from "./webpages/AboutUs";
 import Track from "./webpages/Track";
 import Request from "./webpages/Request";
-
+import Confirmation from "./webpages/Confirmation";
 class App extends Component {
   render() {
     return (
@@ -16,6 +16,7 @@ class App extends Component {
           <Route path="/aboutus" component={AboutUs} />
           <Route path="/tracking" component={Track} />
           <Route path="/request" component={Request} />
+          <Route path="/confirmation" component={Confirmation} />
         </Switch>
       </div>
     );

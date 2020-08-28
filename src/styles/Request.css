@@ -37,7 +37,7 @@
   height: 35px;
   border-radius: 0px;
 }
-.ant-select {
+.ant-select::placeholder {
   color: rgb(185, 184, 184);
 }
 .Radio {
