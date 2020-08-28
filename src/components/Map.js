@@ -173,11 +173,12 @@ class Map extends Component {
       var closestStation = stations[0];
       var minRoute = Number.MAX_VALUE;
       stations.forEach((station) => {
-        var route = {
+        var path = {
           origin: station,
           destination: this.state.pickUpLatLng,
+          travelMode: "BICYCLING",
         };
-        var route = routeFinder.route(route, function (response, status) {
+        var route = routeFinder.route(path, function (response, status) {
           if (status !== "OK") {
             window.alert("Directions request failed due to " + status);
             return;
