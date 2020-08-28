@@ -3,7 +3,6 @@
 @import "./styles/Service.css";
 @import "./styles/AddressAutocomplete.css";
 @import "./styles/Request.css";
-@import "./styles/Track.css";
 
 body {
   margin: 0;

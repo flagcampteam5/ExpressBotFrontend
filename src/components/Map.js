@@ -3,8 +3,8 @@ import GoogleMapReact from "google-map-react";
 import { GOOGLE_KEY } from "../constants";
 
 const center = {
-  lat: 37.773972,
-  lng: -122.431297,
+  lat: 37.742011,
+  lng: -122.525225,
 };
 
 class Map extends Component {
@@ -34,7 +34,7 @@ class Map extends Component {
           style={{ width: "100%", height: "100vh" }}
           bootstrapURLKeys={{ key: GOOGLE_KEY }}
           defaultCenter={center}
-          defaultZoom={12}
+          defaultZoom={12.5}
           onGoogleApiLoaded={({ map, maps }) => this.renderMarkers(map, maps)}
         ></GoogleMapReact>
       </div>

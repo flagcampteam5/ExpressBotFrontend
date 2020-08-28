@@ -5,7 +5,7 @@
   margin: 0;
   position: relative;
 }
-.RequestDetails {
+.Card {
   width: 325px;
   margin: 100px auto;
   margin-left: 100px;
@@ -16,8 +16,9 @@
   border-color: transparent;
   z-index: 1000;
   float: left;
+  box-shadow: rgb(180, 180, 180) 0 2px 8px;
 }
-.ConfirmButton {
+.Button {
   background-color: #fcc438;
   border-color: #fcc438;
   width: 255px;
@@ -37,9 +38,8 @@
   border-radius: 0px;
 }
 .ant-select {
-  color: grey;
+  color: rgb(185, 184, 184);
 }
 .Radio {
-  background-color: #c1e4f7;
   height: 35px;
 }

@@ -29,7 +29,7 @@ class Track extends Component {
     if (this.state.enteredTrackingNum === false) {
       return (
         <div>
-          <Card className="TrackCard" title="Track Your Package">
+          <Card className="Card" title="Track Your Package">
             <Form id="orderNumber">
               <Form.Item>
                 <Input
@@ -42,7 +42,7 @@ class Track extends Component {
 
               <Form.Item>
                 <Button
-                  className="ConfirmButton"
+                  className="Button"
                   form="orderNumber"
                   type="primary"
                   htmlType="submit"

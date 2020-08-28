@@ -81,7 +81,7 @@ class Request extends Component {
       price: 0.5,
     };
     return (
-      <Card className="RequestDetails" title="Request Details">
+      <Card className="Card" title="Request Details">
         <Form>
           <Form.Item
             name="Your Input"
@@ -167,7 +167,7 @@ class Request extends Component {
           </Form.Item>
           <Form.Item>
             <Button
-              className="ConfirmButton"
+              className="Button"
               type="primary"
               onClick={this.handleSubmit}
             >
