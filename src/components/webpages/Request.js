@@ -34,7 +34,7 @@ class Request extends Component {
       return (
         <div>
           <this.renderForm />
-          {this.renderMap(this.state.typeOfRobot)}
+          {this.renderMap()}
         </div>
       );
     }
@@ -47,7 +47,7 @@ class Request extends Component {
           destinationAddress={this.state.destinationAddress}
           estimatedDeliveryTime={this.state.estimatedDeliveryTime}
         />
-        {this.renderMap(this.state.typeOfRobot)}
+        {this.renderMap()}
       </div>
     );
   }
@@ -81,7 +81,7 @@ class Request extends Component {
       price: 0.5,
     };
     return (
-      <Card title="Request Details">
+      <Card className="Card" title="Request Details">
         <Form>
           <Form.Item
             name="Your Input"
@@ -93,12 +93,14 @@ class Request extends Component {
             ]}
           >
             <Input
+              className="Input"
               placeholder="Enter Your Email"
               onChange={this.handleCustomerEmail}
             />
           </Form.Item>
           <Form.Item>
             <Input
+              className="Input"
               placeholder="Enter Recipient's Email"
               onChange={this.handleRecipientEmail}
             />
@@ -107,7 +109,8 @@ class Request extends Component {
             style={{ display: "inline-block", width: "calc(50% - 8px)" }}
           >
             <Select
-              defaultValue="Weight of Package"
+              className="Select"
+              defaultValue="Weight"
               onChange={this.handleWeight}
             >
               {weights.map((option) => (
@@ -126,7 +129,8 @@ class Request extends Component {
           >
             {
               <Select
-                defaultValue="Dimension of Package"
+                className="Select"
+                defaultValue="Dimension"
                 onChange={this.handleDimension}
               >
                 {dimensions.map((option) => (
@@ -140,6 +144,7 @@ class Request extends Component {
           <Form.Item>
             {this.state.weight !== null && this.state.dimension !== null ? (
               <Radio.Group
+                className="Radio"
                 defaultValue={this.state.typeOfRobot}
                 buttonStyle="solid"
                 onChange={this.handleRobotSelect}
@@ -161,7 +166,11 @@ class Request extends Component {
             ) : null}
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={this.handleSubmit}>
+            <Button
+              className="Button"
+              type="primary"
+              onClick={this.handleSubmit}
+            >
               Confirm
             </Button>
           </Form.Item>
@@ -170,17 +179,12 @@ class Request extends Component {
     );
   };
 
-  renderMap = (typeOfRobot) => {
+  renderMap = () => {
     return (
-      <div>
-        <ul>
-          <li>Pick-Up Location: {this.state.pickUpAddress}</li>
-          <li>Destination: {this.state.destinationAddress}</li>
-        </ul>
+      <div className="MapContainer">
         <Map
           pickUpLatLng={this.state.pickUpLatLng}
           destinationLatLng={this.state.destinationLatLng}
-          typeOfRobot={this.state.typeOfRobot}
           ref={this.Map}
         />
       </div>

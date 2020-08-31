@@ -62,7 +62,7 @@ class Service extends Component {
               />
             </Form.Item>
             <Form.Item>
-              <Button className="Button" type="primary">
+              <Button className="ServiceButton" type="primary">
                 <Link
                   to={{
                     pathname: "/request",

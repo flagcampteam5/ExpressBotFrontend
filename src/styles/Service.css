@@ -19,7 +19,7 @@
   margin: 90px auto;
   text-align: center;
   padding: 30px;
-  height: 350px;
+  height: auto;
   border-radius: 15px;
   border-color: transparent;
 }
@@ -30,9 +30,9 @@
   padding: 30px;
   align-items: center;
 }
-.Button {
+.ServiceButton {
   width: 350px;
-  height: 35px;
+  height: 40px;
   border-color: #fcc438;
   background-color: #fcc438;
 }

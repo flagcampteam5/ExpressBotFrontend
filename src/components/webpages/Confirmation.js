@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 class Confirmation extends Component {
   render() {
     return (
-      <Card title="Thank You For Your Order!">
+      <Card className="Card" title="Thank You For Your Order!">
         <Form>
           <Form.Item>
             <ul>
@@ -27,12 +27,21 @@ class Confirmation extends Component {
             </ul>
           </Form.Item>
           <Form.Item>
-            <Button type="primary">
-              <Link to="/tracking">Track Order</Link>
+            <Button className="Button" type="primary">
+              <Link
+                to={{
+                  pathname: "/tracking",
+                  state: {
+                    orderId: this.props.orderId,
+                  },
+                }}
+              >
+                Track Order
+              </Link>
             </Button>
           </Form.Item>
           <Form.Item>
-            <Button type="primary">
+            <Button className="Button" type="primary">
               <Link to="/">Place Another Order</Link>
             </Button>
           </Form.Item>
