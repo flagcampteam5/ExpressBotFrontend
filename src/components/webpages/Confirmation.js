@@ -28,7 +28,16 @@ class Confirmation extends Component {
           </Form.Item>
           <Form.Item>
             <Button className="Button" type="primary">
-              <Link to="/tracking">Track Order</Link>
+              <Link
+                to={{
+                  pathname: "/tracking",
+                  state: {
+                    orderId: this.props.orderId,
+                  },
+                }}
+              >
+                Track Order
+              </Link>
             </Button>
           </Form.Item>
           <Form.Item>

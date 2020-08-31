@@ -110,7 +110,7 @@ class Request extends Component {
           >
             <Select
               className="Select"
-              defaultValue="Weight of Package"
+              defaultValue="Weight"
               onChange={this.handleWeight}
             >
               {weights.map((option) => (
@@ -130,7 +130,7 @@ class Request extends Component {
             {
               <Select
                 className="Select"
-                defaultValue="Dimension of Package"
+                defaultValue="Dimension"
                 onChange={this.handleDimension}
               >
                 {dimensions.map((option) => (

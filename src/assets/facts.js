@@ -11,3 +11,10 @@ export const station3 = {
   lng: -122.419678,
 };
 export const stations = [station1, station2, station3];
+
+export const status = [
+  "order placed",
+  "heading to pick-up",
+  "heading to destination",
+  "order completed!",
+];

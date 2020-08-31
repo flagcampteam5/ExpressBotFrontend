@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
-import { stations, station1 } from "../assets/stations";
+import { stations } from "../assets/facts";
 import { GOOGLE_KEY } from "../constants";
 
 const center = {
@@ -16,7 +16,8 @@ class Map extends Component {
     this.markers = [];
     this.roadBotDirectionsService = null;
     this.roadBotDirectionsRenderer = null;
-    this.droneRoute = null;
+    this.directions = null;
+
     this.state = {
       pickUpAddress: this.props.pickUpAddress,
       pickUpLatLng: this.props.pickUpLatLng,
@@ -25,6 +26,7 @@ class Map extends Component {
       roadbotRouteRendered: false,
       droneRouteRendered: false,
       typeOfRobot: this.props.typeOfRobot,
+      currentLocationMarker: null,
     };
   }
 
@@ -37,12 +39,20 @@ class Map extends Component {
           bootstrapURLKeys={{ key: GOOGLE_KEY }}
           defaultCenter={center}
           defaultZoom={12.5}
-          onGoogleApiLoaded={({ map, maps }) => this.renderMarkers(map, maps)}
+          onGoogleApiLoaded={({ map, maps }) => {
+            this.renderMarkers(map, maps);
+          }}
         ></GoogleMapReact>
       </div>
     );
   }
   renderMarkers = (map, maps) => {
+    console.log(
+      "pickup",
+      this.state.pickUpLatLng,
+      "destination",
+      this.state.destinationLatLng
+    );
     if (this.markers.length > 0 && this.map !== null) {
       for (var i = 0; i < this.markers.length; i++) {
         this.markers[i].setMap(this.map);
@@ -50,7 +60,6 @@ class Map extends Component {
     } else {
       this.map = map;
       this.maps = maps;
-      console.log(this.map, this.maps);
       let marker1 = new maps.Marker({
         position: this.state.pickUpLatLng,
         map,
@@ -60,6 +69,18 @@ class Map extends Component {
         map,
       });
       this.markers = [marker1, marker2];
+    }
+    if (this.props.tracking) {
+      if (this.props.typeOfRobot === "RoadBot") {
+        this.renderRoadBot();
+      } else {
+        let stationMarker = new maps.Marker({
+          position: this.props.station,
+          map,
+        });
+        stationMarker.setMap(map);
+        this.renderDrone();
+      }
     }
   };
 
@@ -73,14 +94,10 @@ class Map extends Component {
     if (!this.state.roadbotRouteRendered) {
       this.removeMarkers();
       this.removeDroneRoute();
-      console.log("rendring robot route");
-
+      var self = this;
       let roadBotDirectionsService = new this.maps.DirectionsService();
       let roadBotDirectionsRenderer = new this.maps.DirectionsRenderer();
-      let closestStation = this.findClosestStation(
-        this.state.pickUpLatLng,
-        "RoadBot"
-      );
+      let closestStation = this.findClosestStation(this.state.pickUpLatLng);
       const route = {
         origin: closestStation,
         waypoints: [{ location: this.state.pickUpLatLng, stopover: true }],
@@ -94,8 +111,7 @@ class Map extends Component {
           return;
         } else {
           roadBotDirectionsRenderer.setDirections(response); // Add route to the map
-          var directionsData = response.routes[0].legs[0];
-          console.log("directionData", directionsData);
+          self.directions = response.routes[0].overview_path;
         }
       });
       this.roadBotDirectionsRenderer = roadBotDirectionsRenderer;
@@ -103,6 +119,7 @@ class Map extends Component {
       this.setState({
         roadbotRouteRendered: true,
       });
+      console.log("directions2", this.directions);
     }
   };
   removeRoadBotRoute = () => {
@@ -115,10 +132,7 @@ class Map extends Component {
   };
   renderDroneRoute = () => {
     if (!this.state.droneRouteRendered) {
-      let closestStation = this.findClosestStation(
-        this.state.pickUpLatLng,
-        "Drone"
-      );
+      let closestStation = this.findClosestStation(this.state.pickUpLatLng);
       console.log(closestStation);
       let straightLine = new this.maps.Polyline({
         path: [
@@ -126,7 +140,7 @@ class Map extends Component {
           this.state.pickUpLatLng,
           this.state.destinationLatLng,
         ],
-        strokeColor: "#c1e4f7",
+        strokeColor: "#3870fc",
         strokeWeight: 4,
       });
       this.removeRoadBotRoute();
@@ -155,46 +169,17 @@ class Map extends Component {
       });
     }
   };
-  findClosestStation = (location, typeOfRobot) => {
-    if (typeOfRobot === "Drone") {
-      var closest = stations[0];
-      var minDistance = this.haversine_distance(stations[0], location);
-      stations.forEach((station) => {
-        let distance = this.haversine_distance(station, location);
-        if (distance < minDistance) {
-          closest = station;
-          minDistance = distance;
-        }
-      });
-      return closest;
-    }
-    if (typeOfRobot === "RoadBot") {
-      let routeFinder = new this.maps.DirectionsService();
-      var closestStation = stations[0];
-      var minRoute = Number.MAX_VALUE;
-      stations.forEach((station) => {
-        var path = {
-          origin: station,
-          destination: this.state.pickUpLatLng,
-          travelMode: "BICYCLING",
-        };
-        var route = routeFinder.route(path, function (response, status) {
-          if (status !== "OK") {
-            window.alert("Directions request failed due to " + status);
-            return;
-          } else {
-            var directionsData = response.routes[0].legs[0];
-            return directionsData;
-          }
-        });
-        if (route && route.distance.value < minRoute) {
-          closestStation = station;
-          minRoute = route;
-        }
-      });
-
-      return closestStation;
-    }
+  findClosestStation = (location) => {
+    var closest = stations[0];
+    var minDistance = Number.MAX_VALUE;
+    stations.forEach((station) => {
+      let distance = this.haversine_distance(station, location);
+      if (distance < minDistance) {
+        closest = station;
+        minDistance = distance;
+      }
+    });
+    return closest;
   };
 
   //the following method of calculating distance using the Haversine formula
@@ -219,6 +204,132 @@ class Map extends Component {
         )
       );
     return d;
+  }
+
+  //when tracking, put a marker at the location of the roadbot based on a status_id returned from backend
+  renderRoadBot = () => {
+    var self = this;
+    if (!this.directions) {
+      let roadBotDirectionsService = new this.maps.DirectionsService();
+      let roadBotDirectionsRenderer = new this.maps.DirectionsRenderer();
+      const route = {
+        origin: this.props.station,
+        waypoints: [{ location: this.state.pickUpLatLng, stopover: false }],
+        destination: this.state.destinationLatLng,
+        travelMode: "BICYCLING",
+      };
+      roadBotDirectionsRenderer.setMap(this.map);
+      roadBotDirectionsService.route(route, (response, status) => {
+        if (status !== "OK") {
+          window.alert("Directions request failed due to " + status);
+          return;
+        } else {
+          roadBotDirectionsRenderer.setDirections(response); // Add route to the map
+          var directionsData1 = response.routes[0].legs[0];
+          var directionsData2 = response.routes[0].legs[1];
+          self.directions = {
+            overview: response.routes[0].overview_path,
+            segment1: directionsData1,
+            segment2: directionsData2,
+          };
+          self.updateCurrentLocation();
+        }
+      });
+    }
+  };
+
+  //when tracking, put a marker at the location of the drone based on a status_id returned from backend
+  renderDrone = () => {
+    if (!this.directions) {
+      let distanceStationToPickUp = this.haversine_distance(
+        this.props.station,
+        this.props.pickUpLatLng
+      );
+      let distancePickUpToDestination = this.haversine_distance(
+        this.props.pickUpLatLng,
+        this.props.destinationLatLng
+      );
+      let totalDistance = distanceStationToPickUp + distancePickUpToDestination;
+      let segmentLength = totalDistance / 19.0;
+      let distanceAlongPath = segmentLength * this.props.status_id;
+      let lineStationToPickUp = new this.maps.Polyline({
+        path: [this.props.station, this.props.pickUpLatLng],
+        strokeColor: "#3870fc",
+        strokeWeight: 4,
+      });
+      let linePickUpToDestination = new this.maps.Polyline({
+        path: [this.props.pickUpLatLng, this.props.destinationLatLng],
+        strokeColor: "#3870fc",
+        strokeWeight: 4,
+      });
+      lineStationToPickUp.setMap(this.map);
+      linePickUpToDestination.setMap(this.map);
+      if (distanceAlongPath <= distanceStationToPickUp) {
+        let currentLat =
+          this.props.station.lat +
+          (this.props.pickUpLatLng.lat - this.props.station.lat) *
+            (distanceAlongPath / distanceStationToPickUp);
+        let currentLng =
+          this.props.station.lng +
+          (this.props.pickUpLatLng.lng - this.props.station.lng) *
+            (distanceAlongPath / distanceStationToPickUp);
+        this.props.updateStatus("heading to pick-up");
+        this.updateCurrentLocation({ lat: currentLat, lng: currentLng });
+      } else {
+        let remainDistance = distanceAlongPath - distanceStationToPickUp;
+        let currentLat =
+          this.props.pickUpLatLng.lat +
+          (this.props.destinationLatLng.lat - this.props.pickUpLatLng.lat) *
+            (remainDistance / distanceStationToPickUp);
+        let currentLng =
+          this.props.pickUpLatLng.lng +
+          (this.props.destinationLatLng.lng - this.props.pickUpLatLng.lng) *
+            (remainDistance / distanceStationToPickUp);
+        //this.status = "heading to destination";
+        this.props.updateStatus("heading to destination");
+        this.updateCurrentLocation({ lat: currentLat, lng: currentLng });
+      }
+    }
+  };
+
+  //places a marker at the current location of the bot
+  //and removes the marker at the previous location of the bot
+  updateCurrentLocation(location) {
+    if (this.props.typeOfRobot === "Drone") {
+      if (this.currentLocationMarker) {
+        this.currentLocationMarker.setMap(null);
+      }
+      let marker = new this.maps.Marker({
+        position: { lat: location.lat, lng: location.lng },
+        map: this.map,
+      });
+      this.setState({
+        currentLocationMarker: marker,
+      });
+    }
+    if (this.props.typeOfRobot === "RoadBot") {
+      if (this.currentLocationMarker) {
+        this.currentLocationMarker.setMap(null);
+      }
+      let length = this.directions.overview.length;
+      let location = this.directions.overview[
+        Math.floor((length / 19.0) * this.props.status_id)
+      ];
+
+      let marker = new this.maps.Marker({
+        position: { lat: location.lat(), lng: location.lng() },
+        map: this.map,
+      });
+      this.setState({
+        currentLocationMarker: marker,
+      });
+      let percent =
+        Math.round((this.props.status_id / 19.0) * 100).toString() + "%";
+      this.props.updateStatus(percent);
+    }
+  }
+  currentStatus() {
+    return this.status;
   }
 }
 
