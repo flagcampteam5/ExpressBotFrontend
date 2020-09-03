@@ -1,38 +1,64 @@
 .Block {
-  color: white;
-  background-color: #fcc438;
-  display: flex;
-  padding: 90px;
+    color: white;
+    background-color: #fcc438;
+    display: flex;
+    padding: 20px 20px;
+}
+.introduction {
+    width: 50%;
+    margin: 20px 20px;
+    font-size: 1.5em;
+}
+.img {
+    margin: auto;
+}
+.picture {
+    height: 300px;
+}
+h2 {
+    color: #3870fc;
 }
 .IntroBlock {
-  color: white;
-  background-color: #fcc438;
-  display: flex;
-  text-align: center;
-  position: relative;
-  top: 50%;
+    color: white;
+    background-color: #fcc438;
+    display: flex;
+    text-align: center;
+    position: relative;
+    top: 50%;
 }
 
 .RequestCard {
-  background-color: rgba(255, 255, 255, 0.5);
-  width: 450px;
-  margin: 90px auto;
-  text-align: center;
-  padding: 30px;
-  height: 350px;
-  border-radius: 15px;
-  border-color: transparent;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 450px;
+    margin: 90px auto;
+    text-align: center;
+    padding: 30px;
+    height: auto;
+    border-radius: 15px;
+    border-color: transparent;
 }
 .Background {
-  background-image: url(../assets/images/SF.jpg);
-  background-size: cover;
-  min-height: 900px;
-  padding: 30px;
-  align-items: center;
+    background-image: url(../assets/images/SF.jpg);
+    background-size: cover;
+    min-height: 900px;
+    padding: 30px;
+    align-items: center;
 }
-.Button {
-  width: 350px;
-  height: 35px;
-  border-color: #fcc438;
-  background-color: #fcc438;
+.ServiceButton {
+    width: 350px;
+    height: 40px;
+    border-color: #fcc438;
+    background-color: #fcc438;
+}
+@media screen and (max-width: 800px) {
+    .Block {
+        display: block;
+    }
+    .introduction {
+        width: 100%;
+        margin: 20px auto;
+    }
+    .img {
+        margin: 20px auto;
+    }
 }

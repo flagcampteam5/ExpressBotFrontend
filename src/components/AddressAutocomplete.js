@@ -5,7 +5,9 @@ import PlacesAutocomplete, {
 } from "react-google-places-autocomplete";
 import { GOOGLE_KEY } from "../constants";
 import { Spin } from "antd";
-
+const sw = { lat: 37.705403, lng: -122.505063 };
+const ne = { lat: 37.839333, lng: -122.327571 };
+const bounds = [sw, ne];
 class AddressAutocomplete extends Component {
   render() {
     return (
@@ -15,6 +17,9 @@ class AddressAutocomplete extends Component {
           apiKey={GOOGLE_KEY}
           placeholder={this.props.placeholder}
           loader={<Spin spinning={true} tip="Loading..." />}
+          autocompletionRequest={{
+            bounds: bounds,
+          }}
           onSelect={({ description }) => {
             this.handleSelect(description);
           }}
