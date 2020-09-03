@@ -1,14 +1,26 @@
 .Menu {
-  color: white;
-  background-color: #fcc438;
-  border-color: #fcc438;
+    color: white;
+    background-color: #fcc438;
+    border-color: #fcc438;
 }
 .aboutUs {
-  color: white;
+    color: white;
 }
 .service {
-  color: white;
+    color: white;
 }
 .track {
-  color: white;
+    color: white;
+    margin-right: 100px;
+}
+.link {
+    font-size: 1.5em;
+    color: white;
+}
+.float-to-right {
+    float: right;
+}
+
+.logo {
+    height: 80px;
 }
