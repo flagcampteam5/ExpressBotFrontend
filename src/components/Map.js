@@ -39,6 +39,7 @@ class Map extends Component {
           bootstrapURLKeys={{ key: GOOGLE_KEY }}
           defaultCenter={center}
           defaultZoom={12.5}
+          yesIwanttouseGoogleMapApiInternal={true}
           onGoogleApiLoaded={({ map, maps }) => {
             this.renderMarkers(map, maps);
           }}
