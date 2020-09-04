@@ -171,21 +171,26 @@ class Map extends Component {
     }
   };
   findClosestStation = (location) => {
-    var closest = stations[0];
+    var closest = 0;
     var minDistance = Number.MAX_VALUE;
-    stations.forEach((station) => {
-      let distance = this.haversine_distance(station, location);
+    for (var i = 0; i < stations.length; i++) {
+      let distance = this.haversine_distance(stations[i], location);
       if (distance < minDistance) {
-        closest = station;
+        closest = i;
         minDistance = distance;
       }
-    });
-    return closest;
+    }
+    this.props.onFoundStation(closest + 1);
+    return stations[closest];
   };
 
   //the following method of calculating distance using the Haversine formula
   //is adapted from https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
   haversine_distance(location1, location2) {
+    if (location1 === null || location2 === null) {
+      console.log("null locations");
+      return;
+    }
     var R = 3958.8; // Radius of the Earth in miles
     var rlat1 = location1.lat * (Math.PI / 180); // Convert degrees to radians
     var rlat2 = location2.lat * (Math.PI / 180); // Convert degrees to radians

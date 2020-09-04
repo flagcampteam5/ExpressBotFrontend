@@ -10,6 +10,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^3.26.18",
+    "axios": "^0.20.0",
     "contentful": "^7.14.6",
     "dotenv": "^8.2.0",
     "google-distance-matrix": "^1.1.1",
