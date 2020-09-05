@@ -18,10 +18,10 @@ class BotTracker extends Component {
     };
     this.updateStatus = this.updateStatus.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     var self = this;
     axios
-      .get("localhost:8080/expressbot/TrackOrder", {
+      .get("http://localhost:8080/expressbot/TrackOrder", {
         params: {
           order_id: self.state.orderId,
         },

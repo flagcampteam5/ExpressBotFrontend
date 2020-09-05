@@ -54,13 +54,13 @@ class Confirmation extends Component {
     var self = this;
     axios
       .post("http://localhost:8080/expressbot/PlaceOrder", {
-        pickUpLat: 32.17,
-        pickUpLng: 32.2,
-        destinationLat: 32.2,
-        destinationLng: 32.2,
-        order_id: "12341",
-        station_id: 1,
-        isRobot: true,
+        pickUpLat: self.props.pickUpLatLng.lat,
+        pickUpLng: self.props.pickUpLatLng.lng,
+        destinationLat: self.props.destinationLatLng.lat,
+        destinationLng: self.props.destinationLatLng.lng,
+        order_id: self.props.orderId,
+        station_id: self.props.station_id,
+        isRobot: self.props.isRobot,
         timestamp: 1234455,
       })
       .then(function (response) {
