@@ -53,23 +53,21 @@ class Confirmation extends Component {
   componentDidMount() {
     var self = this;
     axios
-      .get("https://dog.ceo/api/breeds/list/all", {})
+      .post("http://localhost:8080/expressbot/PlaceOrder", {
+        pickUpLat: 32.17,
+        pickUpLng: 32.2,
+        destinationLat: 32.2,
+        destinationLng: 32.2,
+        order_id: "12341",
+        station_id: 1,
+        isRobot: true,
+        timestamp: 1234455,
+      })
       .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
-        console.log(
-          "pickup data type: ",
-          self.props.pickUpLatLng.lat.type,
-          self.props.pickUpLatLng.lat,
-          self.props.pickUpLatLng.lng,
-          self.props.orderId.type,
-          self.props.stationId,
-          self.props.isRobot,
-          self.props.pickUpLatLng.lat,
-          self.props.destinationLatLng.lng
-        );
       });
   }
 }
