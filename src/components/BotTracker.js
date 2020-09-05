@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { stations } from "../assets/facts";
 import Map from "./Map";
+import axios from "axios";
 
 class BotTracker extends Component {
   constructor(props) {
@@ -12,29 +13,43 @@ class BotTracker extends Component {
       status_id: 10,
       station: stations[0],
       typeOfRobot: "Drone",
-      pickUpLatLng: stations[1],
-      destinationLatLng: stations[2],
+      pickUpLatLng: null,
+      destinationLatLng: null,
     };
     this.updateStatus = this.updateStatus.bind(this);
   }
+  componentWillMount() {
+    var self = this;
+    axios
+      .get("localhost:8080/expressbot/TrackOrder", {
+        params: {
+          order_id: self.state.orderId,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        console.log(self.state.orderId);
+      });
+  }
   render() {
-    console.log(this.props.onProgressChange);
     return (
-      console.log("pickup", this.state.pickUpLatLng),
-      (
-        <div className="MapContainer">
-          <Map
-            station={this.state.station}
-            pickUpLatLng={this.state.pickUpLatLng}
-            destinationLatLng={this.state.destinationLatLng}
-            typeOfRobot={this.state.typeOfRobot}
-            tracking={true}
-            updateStatus={this.updateStatus}
-            status_id={this.state.status_id}
-            ref={this.Map}
-          />
-        </div>
-      )
+      <div className="MapContainer">
+        <Map
+          station={this.state.station}
+          pickUpLatLng={this.state.pickUpLatLng}
+          destinationLatLng={this.state.destinationLatLng}
+          typeOfRobot={this.state.typeOfRobot}
+          tracking={true}
+          updateStatus={this.updateStatus}
+          status_id={this.state.status_id}
+          ref={this.Map}
+        />
+      </div>
     );
   }
 
