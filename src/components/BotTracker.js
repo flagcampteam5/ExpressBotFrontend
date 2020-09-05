@@ -28,13 +28,18 @@ class BotTracker extends Component {
       })
       .then(function (response) {
         console.log(response);
+        this.setState({
+          station: response.station_id,
+          pickUpLatLng: [response.pickUpLat, response.pickUpLng],
+          destinationLatLng: [response.destinationLat, response.destinationLng],
+          typeOfRobot: response.isRobot ? "RoadBot" : "Drone",
+          status_id: response.status_id,
+        });
       })
       .catch(function (error) {
         console.log(error);
       })
-      .then(function () {
-        console.log(self.state.orderId);
-      });
+      .then(function () {});
   }
   render() {
     return (

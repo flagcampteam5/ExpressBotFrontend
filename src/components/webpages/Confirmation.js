@@ -59,7 +59,7 @@ class Confirmation extends Component {
         destinationLat: self.props.destinationLatLng.lat,
         destinationLng: self.props.destinationLatLng.lng,
         order_id: self.props.orderId,
-        station_id: self.props.station_id,
+        station_id: self.props.stationId,
         isRobot: self.props.isRobot,
         timestamp: 1234455,
       })
