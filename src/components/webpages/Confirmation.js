@@ -6,10 +6,14 @@ import axios from "axios";
 class Confirmation extends Component {
   render() {
     return (
-      <Card className="Card" title="Thank You For Your Order!">
+      <Card
+        className="Card"
+        style={{ width: 375 }}
+        title="Thank You For Your Order!"
+      >
         <Form>
           <Form.Item>
-            <ul>
+            <ul className="ConfirmationList">
               <li>Order Number: {this.props.orderId}</li>
               {this.props.customerEmail !== null ? (
                 <li>
@@ -23,6 +27,9 @@ class Confirmation extends Component {
               <li>
                 Estimated Delivery Time: {this.props.estimatedDeliveryTime.hour}
                 :{this.props.estimatedDeliveryTime.minute}
+              </li>
+              <li>
+                Type of Robot: {this.props.isRobot ? "Road Bot" : "Drone"}
               </li>
               <li>Order total: $10</li>
             </ul>

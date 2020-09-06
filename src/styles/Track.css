@@ -1,3 +1,27 @@
 .ProgressBar {
-  position: absolute;
+  float: left;
+}
+.TrackCard {
+  width: 390px;
+  margin: 100px auto;
+  text-align: center;
+  padding: 10px;
+  height: auto;
+  border-radius: 5px;
+  border-color: transparent;
+  z-index: 1000;
+  box-shadow: rgb(180, 180, 180) 0 2px 8px;
+}
+.TrackingCard {
+  width: 370px;
+  margin: 100px auto;
+  margin-left: 100px;
+  text-align: center;
+  padding: 10px;
+  height: auto;
+  border-radius: 5px;
+  border-color: transparent;
+  z-index: 1000;
+  float: left;
+  box-shadow: rgb(180, 180, 180) 0 2px 8px;
 }
