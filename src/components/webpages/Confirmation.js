@@ -6,10 +6,14 @@ import axios from "axios";
 class Confirmation extends Component {
   render() {
     return (
-      <Card className="Card" title="Thank You For Your Order!">
+      <Card
+        className="Card"
+        style={{ width: 375 }}
+        title="Thank You For Your Order!"
+      >
         <Form>
           <Form.Item>
-            <ul>
+            <ul className="ConfirmationList">
               <li>Order Number: {this.props.orderId}</li>
               {this.props.customerEmail !== null ? (
                 <li>
@@ -23,6 +27,9 @@ class Confirmation extends Component {
               <li>
                 Estimated Delivery Time: {this.props.estimatedDeliveryTime.hour}
                 :{this.props.estimatedDeliveryTime.minute}
+              </li>
+              <li>
+                Type of Robot: {this.props.isRobot ? "Road Bot" : "Drone"}
               </li>
               <li>Order total: $10</li>
             </ul>
@@ -54,13 +61,13 @@ class Confirmation extends Component {
     var self = this;
     axios
       .post("http://localhost:8080/expressbot/PlaceOrder", {
-        pickUpLat: 32.17,
-        pickUpLng: 32.2,
-        destinationLat: 32.2,
-        destinationLng: 32.2,
-        order_id: "12341",
-        station_id: 1,
-        isRobot: true,
+        pickUpLat: self.props.pickUpLatLng.lat,
+        pickUpLng: self.props.pickUpLatLng.lng,
+        destinationLat: self.props.destinationLatLng.lat,
+        destinationLng: self.props.destinationLatLng.lng,
+        order_id: self.props.orderId,
+        station_id: self.props.stationId,
+        isRobot: self.props.isRobot,
         timestamp: 1234455,
       })
       .then(function (response) {

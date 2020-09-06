@@ -17,13 +17,14 @@ class Track extends Component {
       percent: 0,
     };
     this.onProgressChange = this.onProgressChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
     if (this.state.enteredTrackingNum === false) {
       return (
         <div>
-          <Card className="Card" title="Track Your Package">
+          <Card className="TrackCard" title="Track Your Package">
             <Form id="orderNumber">
               <Form.Item>
                 <Input
@@ -37,6 +38,7 @@ class Track extends Component {
 
               <Form.Item>
                 <Button
+                  style={{ width: 320 }}
                   className="Button"
                   form="orderNumber"
                   type="primary"
@@ -48,14 +50,13 @@ class Track extends Component {
               </Form.Item>
             </Form>
           </Card>
-          <BotTracker />
         </div>
       );
     } else {
       return (
         <div>
           <Card
-            className="Card"
+            className="TrackingCard"
             title={"Tracking Order: " + this.state.orderNumber}
           >
             <div>
@@ -75,7 +76,6 @@ class Track extends Component {
               />
             </div>
           </Card>
-
           <BotTracker
             orderId={this.state.orderNumber}
             onProgressChange={this.onProgressChange}

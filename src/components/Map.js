@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import { stations } from "../assets/facts";
 import { GOOGLE_KEY } from "../constants";
+import { drone } from "../assets/images/drone.png";
+import { Avatar } from "antd";
 
 const center = {
   lat: 37.742011,
@@ -17,19 +19,22 @@ class Map extends Component {
     this.roadBotDirectionsService = null;
     this.roadBotDirectionsRenderer = null;
     this.directions = null;
-
     this.state = {
-      pickUpAddress: this.props.pickUpAddress,
-      pickUpLatLng: this.props.pickUpLatLng,
-      destinationAddress: this.props.destinationAddress,
-      destinationLatLng: this.props.destinationLatLng,
       roadbotRouteRendered: false,
       droneRouteRendered: false,
-      typeOfRobot: this.props.typeOfRobot,
       currentLocationMarker: null,
+      status_id: this.props.status_id,
     };
   }
-
+  //componentWillReceiveProps(newProps) {
+  //  console.log("received props", newProps.status_id);
+  //  this.setState({
+  //    status_id: newProps.status_id,
+  //  });
+  //  if (this.props.tracking && !this.props.isRobot) {
+  //    this.renderDrone();
+  //  }
+  //}
   render() {
     return (
       <div className="map">
@@ -48,12 +53,6 @@ class Map extends Component {
     );
   }
   renderMarkers = (map, maps) => {
-    console.log(
-      "pickup",
-      this.state.pickUpLatLng,
-      "destination",
-      this.state.destinationLatLng
-    );
     if (this.markers.length > 0 && this.map !== null) {
       for (var i = 0; i < this.markers.length; i++) {
         this.markers[i].setMap(this.map);
@@ -61,24 +60,32 @@ class Map extends Component {
     } else {
       this.map = map;
       this.maps = maps;
+      console.log(
+        "pickup",
+        this.props.pickUpLatLng,
+        "destination",
+        this.props.destinationLatLng
+      );
       let marker1 = new maps.Marker({
-        position: this.state.pickUpLatLng,
+        position: this.props.pickUpLatLng,
         map,
       });
       let marker2 = new maps.Marker({
-        position: this.state.destinationLatLng,
+        position: this.props.destinationLatLng,
         map,
       });
       this.markers = [marker1, marker2];
     }
     if (this.props.tracking) {
       if (this.props.typeOfRobot === "RoadBot") {
+        this.removeMarkers();
         this.renderRoadBot();
       } else {
         let stationMarker = new maps.Marker({
           position: this.props.station,
           map,
         });
+
         stationMarker.setMap(map);
         this.renderDrone();
       }
@@ -98,11 +105,11 @@ class Map extends Component {
       var self = this;
       let roadBotDirectionsService = new this.maps.DirectionsService();
       let roadBotDirectionsRenderer = new this.maps.DirectionsRenderer();
-      let closestStation = this.findClosestStation(this.state.pickUpLatLng);
+      let closestStation = this.findClosestStation(this.props.pickUpLatLng);
       const route = {
         origin: closestStation,
-        waypoints: [{ location: this.state.pickUpLatLng, stopover: true }],
-        destination: this.state.destinationLatLng,
+        waypoints: [{ location: this.props.pickUpLatLng, stopover: true }],
+        destination: this.props.destinationLatLng,
         travelMode: "BICYCLING",
       };
       roadBotDirectionsRenderer.setMap(this.map);
@@ -133,13 +140,17 @@ class Map extends Component {
   };
   renderDroneRoute = () => {
     if (!this.state.droneRouteRendered) {
-      let closestStation = this.findClosestStation(this.state.pickUpLatLng);
-      console.log(closestStation);
+      let closestStation = this.findClosestStation(this.props.pickUpLatLng);
+      console.log(
+        closestStation,
+        this.props.pickUpLatLng,
+        this.props.destinationAddress
+      );
       let straightLine = new this.maps.Polyline({
         path: [
           closestStation,
-          this.state.pickUpLatLng,
-          this.state.destinationLatLng,
+          this.props.pickUpLatLng,
+          this.props.destinationLatLng,
         ],
         strokeColor: "#3870fc",
         strokeWeight: 4,
@@ -220,8 +231,8 @@ class Map extends Component {
       let roadBotDirectionsRenderer = new this.maps.DirectionsRenderer();
       const route = {
         origin: this.props.station,
-        waypoints: [{ location: this.state.pickUpLatLng, stopover: false }],
-        destination: this.state.destinationLatLng,
+        waypoints: [{ location: this.props.pickUpLatLng, stopover: true }],
+        destination: this.props.destinationLatLng,
         travelMode: "BICYCLING",
       };
       roadBotDirectionsRenderer.setMap(this.map);
@@ -257,7 +268,8 @@ class Map extends Component {
       );
       let totalDistance = distanceStationToPickUp + distancePickUpToDestination;
       let segmentLength = totalDistance / 19.0;
-      let distanceAlongPath = segmentLength * this.props.status_id;
+      let distanceAlongPath = segmentLength * this.state.status_id;
+      console.log("totaldist", totalDistance, segmentLength, distanceAlongPath);
       let lineStationToPickUp = new this.maps.Polyline({
         path: [this.props.station, this.props.pickUpLatLng],
         strokeColor: "#3870fc",
@@ -279,6 +291,14 @@ class Map extends Component {
           this.props.station.lng +
           (this.props.pickUpLatLng.lng - this.props.station.lng) *
             (distanceAlongPath / distanceStationToPickUp);
+        console.log(
+          "sanity check",
+          this.haversine_distance(
+            { lat: currentLat, lng: currentLng },
+            this.props.station
+          ),
+          distanceAlongPath
+        );
         this.props.updateStatus("heading to pick-up");
         this.updateCurrentLocation({ lat: currentLat, lng: currentLng });
       } else {
@@ -286,13 +306,30 @@ class Map extends Component {
         let currentLat =
           this.props.pickUpLatLng.lat +
           (this.props.destinationLatLng.lat - this.props.pickUpLatLng.lat) *
-            (remainDistance / distanceStationToPickUp);
+            (remainDistance / distancePickUpToDestination);
         let currentLng =
           this.props.pickUpLatLng.lng +
           (this.props.destinationLatLng.lng - this.props.pickUpLatLng.lng) *
-            (remainDistance / distanceStationToPickUp);
-        //this.status = "heading to destination";
-        this.props.updateStatus("heading to destination");
+            (remainDistance / distancePickUpToDestination);
+        console.log(
+          this.state.status_id,
+          distanceAlongPath <
+            distanceStationToPickUp + distancePickUpToDestination
+        );
+        console.log(
+          "sanity check",
+          this.haversine_distance(
+            { lat: currentLat, lng: currentLng },
+            this.props.pickUpLatLng
+          ),
+          distanceAlongPath
+        );
+        if (this.state.status_id === 19) {
+          this.props.updateStatus("order completed!");
+        } else {
+          this.props.updateStatus("heading to destination");
+        }
+
         this.updateCurrentLocation({ lat: currentLat, lng: currentLng });
       }
     }
@@ -302,11 +339,22 @@ class Map extends Component {
   //and removes the marker at the previous location of the bot
   updateCurrentLocation(location) {
     if (this.props.typeOfRobot === "Drone") {
+      console.log("rendering drone", location);
       if (this.currentLocationMarker) {
         this.currentLocationMarker.setMap(null);
       }
+
       let marker = new this.maps.Marker({
         position: { lat: location.lat, lng: location.lng },
+        animation: this.maps.Animation.BOUNCE,
+        icon: {
+          path:
+            "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
+          fillColor: "#fcc438",
+          fillOpacity: 1,
+          strokeColor: "",
+          strokeWeight: 0,
+        },
         map: this.map,
       });
       this.setState({
@@ -314,23 +362,47 @@ class Map extends Component {
       });
     }
     if (this.props.typeOfRobot === "RoadBot") {
+      console.log("rendering roadbot");
       if (this.currentLocationMarker) {
         this.currentLocationMarker.setMap(null);
       }
       let length = this.directions.overview.length;
-      let location = this.directions.overview[
-        Math.floor((length / 19.0) * this.props.status_id)
-      ];
+      console.log(
+        length,
+        this.directions.overview[
+          Math.floor((length / 19.0) * this.state.status_id) - 1
+        ].lat(),
+        Math.floor((length / 19.0) * this.state.status_id) - 1
+      );
+      let location;
+      if (this.state.status_id === 0) {
+        location = this.props.station;
+      } else if (this.props.status === 19) {
+        location = this.props.destinationLatLng;
+      } else {
+        location = this.directions.overview[
+          Math.floor((length / 19.0) * this.state.status_id - 1)
+        ];
+      }
+      console.log(this.directions.overview, location);
 
       let marker = new this.maps.Marker({
         position: { lat: location.lat(), lng: location.lng() },
         map: this.map,
+        animation: this.maps.Animation.BOUNCE,
+        icon: {
+          path: "M22-48h-44v43h16l6 5 6-5h16z",
+          fillColor: "#fcc438",
+          fillOpacity: 1,
+          strokeColor: "",
+          strokeWeight: 0,
+        },
       });
       this.setState({
         currentLocationMarker: marker,
       });
       let percent =
-        Math.round((this.props.status_id / 19.0) * 100).toString() + "%";
+        Math.round((this.state.status_id / 19.0) * 100).toString() + "%";
       this.props.updateStatus(percent);
     }
   }
